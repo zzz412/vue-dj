@@ -5,7 +5,7 @@
 本项目共包含： 登录，注册，社会招聘，校园招聘
 
 ## 项目启动说明
-
+- 安装 `yarn install`
 - 运行 `yarn serve`
 - 打包 `yarn build`
 
