@@ -1,0 +1,22 @@
+// 导入初始化样式
+@import url('~normalize.css/normalize.css');
+
+body, html, #app {
+  height: 100%;
+  background-color: #FFF;
+}
+
+body {
+  font-size: 14px;
+  color: #666;
+}
+
+.container {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
