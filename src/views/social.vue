@@ -17,6 +17,7 @@
               label 项名
               width 宽度
               align 排列方向
+              show-overflow-tooltip 文字超出隐藏并显示提示
          -->
         <el-table :data="tableData">
           <el-table-column prop="jobTitle" label="职位名称" width="280" show-overflow-tooltip />
