@@ -21,6 +21,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
+  linkActiveClass: 'dj-active', // 自定义激活类名
   routes
 })
 

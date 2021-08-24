@@ -3,6 +3,9 @@
 大疆招聘系列网站.
 
 本项目共包含： 登录，注册，社会招聘，校园招聘
+## 友情链接
++ <a href="https://we.dji.com/zh-CN/">大疆招聘</a>
++ <a href="https://element.eleme.cn/#/zh-CN">ElementUI组件库</a>
 
 ## 项目启动说明
 - 安装 `yarn install`

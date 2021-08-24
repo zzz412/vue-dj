@@ -62,7 +62,7 @@ export default {
     display: inline-block;
     padding: 0 18px;
     color: #3b3e40;
-    &:hover {
+    &:hover, &.dj-active {
       color: #44a8f2;
     }
   }

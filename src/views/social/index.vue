@@ -6,7 +6,7 @@
       <!-- 内容 -->
       <div class="card">
         <!-- 筛选模块 -->
-        <div class="filter"></div>
+        <FilterView />
         <!-- 表格模块 -->
         <!-- el-table 表格组件
             常用属性：
@@ -19,7 +19,20 @@
               align 排列方向
               show-overflow-tooltip 文字超出隐藏并显示提示
          -->
-        <el-table :data="tableData">
+        <!-- v-loading 加载指令  true加载 false停止加载
+                直接用在需要加载的标签上
+                自定义属性：
+                  element-loading-text 设置文案
+                  element-loading-spinner 设置图标
+                  element-loading-background 设置背景颜色
+                修饰符：
+                  fullscreen 全屏加载
+                  lock       锁定滚动条
+         -->
+        <el-table
+          :data="tableData"
+          v-loading="isLoading"
+        >
           <el-table-column prop="jobTitle" label="职位名称" width="280" show-overflow-tooltip />
           <el-table-column prop="claDescription" label="职位类别" align="center" />
           <el-table-column prop="locationDescription" label="工作城市" align="center" />
@@ -70,10 +83,12 @@
 
 <script>
 import dayjs from 'dayjs'
-
+import FilterView from './components/filter-view'
 export default {
+  components: { FilterView },
   data () {
     return {
+      isLoading: false, // 加载中
       tableData: [],
       pagination: { } // 分页器参数
     }
@@ -81,12 +96,16 @@ export default {
   methods: {
     dayjs,
     async fetchData () { // 获取职位列表
+      // 获取数据时加载动画
+      this.isLoading = true
       const { data } = await this.$http.post('/dj/position/queryUsingAndOldPositionVoList',
         {
           currentPage: this.pagination.currentPage,
           schoolFlag: 'N',
           showStatus: 'Y'
         })
+      // 停止加载动画
+      this.isLoading = false
       this.tableData = data.data.datas
       // 设置页码与总条数
       this.pagination = {
