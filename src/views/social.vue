@@ -18,8 +18,8 @@
               width 宽度
               align 排列方向
          -->
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="jobTitle" label="职位名称" width="250" />
+        <el-table :data="tableData">
+          <el-table-column prop="jobTitle" label="职位名称" width="280" show-overflow-tooltip />
           <el-table-column prop="claDescription" label="职位类别" align="center" />
           <el-table-column prop="locationDescription" label="工作城市" align="center" />
           <el-table-column prop="approveTime" label="发布时间" align="center">
@@ -43,6 +43,25 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- el-pagination 分页器
+            常用属性：
+              total 总条数
+              page-size 每页条数 (提供了总条数，每页数，会自动计算总页数)
+              current-page 当前页
+              layout 分页器布局
+              background 设置分页背景色
+         -->
+         <!-- 1. 点击对应页码 进行页面跳转  -->
+         <!-- 2. 页面刷新 分页器跳转到对应页  -->
+         <el-pagination
+          :total="pagination.totalCount"
+          :page-size="pagination.pageSize"
+          :current-page="pagination.currentPage"
+          layout="prev,pager,next,total"
+          background
+          @current-change="pageChange"
+         >
+         </el-pagination>
       </div>
     </div>
   </div>
@@ -54,7 +73,8 @@ import dayjs from 'dayjs'
 export default {
   data () {
     return {
-      tableData: []
+      tableData: [],
+      pagination: { } // 分页器参数
     }
   },
   methods: {
@@ -62,10 +82,22 @@ export default {
     async fetchData () { // 获取职位列表
       const { data } = await this.$http.post('/dj/position/queryUsingAndOldPositionVoList',
         {
+          currentPage: this.pagination.currentPage,
           schoolFlag: 'N',
           showStatus: 'Y'
         })
       this.tableData = data.data.datas
+      // 设置页码与总条数
+      this.pagination = {
+        currentPage: data.data.currentPage,
+        pageSize: data.data.pageSize,
+        totalCount: data.data.totalCount
+      }
+    },
+    pageChange (page) {
+      this.pagination.currentPage = page
+      // 查询数据
+      this.fetchData()
     }
   },
   mounted () {
@@ -98,12 +130,61 @@ export default {
       font-size: 14px;
       cursor: pointer;
       color: #707473;
+      margin: 0;
       .fav {
         margin-left: 3px;
       }
       &:hover {
         color: #232425;
       }
+    }
+  }
+  // 修改组件样式 但是又不能 写全局样式
+  // 深层选择器(选择子组件) https://vue-loader.vuejs.org/zh/guide/scoped-css.html#深度作用选择器
+  ::v-deep .el-table {
+   th {
+      background-color: #F5F5F5;
+      .cell {
+        color: #616466;
+        font-size: 18px;
+        font-weight: 400;
+      }
+    }
+  }
+  ::v-deep .el-pagination {
+    text-align: center;
+    margin-top: 30px;
+    button {
+      margin: 0;
+      background: #FFF;
+      border: 1px solid #ebebeb;
+      border-radius: 0;
+      padding: 0 12px;
+    }
+    .btn-next {
+      border-left: 0;
+    }
+    li {
+      margin: 0;
+      background: #FFF;
+      border: 1px solid #ebebeb;
+      border-radius: 0;
+      border-left: 0;
+      color: #616466;
+      font-weight: 400;
+      padding: 0 12px;
+      &:hover {
+        color: #232526 !important;
+      }
+      &.active {
+        background: #616466 !important;
+      }
+      &.active:hover {
+        color: #FFF !important;
+      }
+    }
+    .el-pagination__total {
+      margin-left: 20px;
     }
   }
 }
