@@ -6,7 +6,8 @@
       <!-- 内容 -->
       <div class="card">
         <!-- 筛选模块 -->
-        <FilterView />
+        <!-- 监听子组件抛出的 search事件 并调用对应方法  -->
+        <FilterView  @search="searchData"/>
         <!-- 表格模块 -->
         <!-- el-table 表格组件
             常用属性：
@@ -89,6 +90,7 @@ export default {
   data () {
     return {
       isLoading: false, // 加载中
+      queryInput: { },
       tableData: [],
       pagination: { } // 分页器参数
     }
@@ -100,6 +102,7 @@ export default {
       this.isLoading = true
       const data = await this.$http.post('position/queryUsingAndOldPositionVoList',
         {
+          ...this.queryInput, // 将查询参数与其他参数 合并 {...a, ...b} 合并对象
           currentPage: this.pagination.currentPage,
           schoolFlag: 'N',
           showStatus: 'Y'
@@ -117,6 +120,11 @@ export default {
     pageChange (page) {
       this.pagination.currentPage = page
       // 查询数据
+      this.fetchData()
+    },
+    searchData (query) { // 监听子组件抛出的事件 并设置查询参数
+      this.queryInput = query
+      // 调用查询方法
       this.fetchData()
     }
   },
