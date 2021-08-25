@@ -8,13 +8,14 @@
         <!-- el-col 列容器 span属性 指定列宽度 -->
         <el-col :span="2">职位类别:</el-col>
         <el-col :span="21">
-          <span class="active">所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
+          <span
+            @click="activeCate = cate.classCode"
+            :class="{active : activeCate === cate.classCode}"
+            v-for="cate in cateList"
+            :key="cate.classCode"
+          >
+            {{cate.description}}
+          </span>
         </el-col>
       </el-row>
     </div>
@@ -23,13 +24,14 @@
       <el-row>
         <el-col :span="2">工作城市:</el-col>
         <el-col :span="21">
-          <span class="active">所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
-          <span>所有类别</span>
+          <span
+            @click="activeCity = city.locCode"
+            :class="{ active: activeCity === city.locCode }"
+            v-for="city in cityList"
+            :key="city.locCode"
+          >
+          {{city.cityName}}
+          </span>
         </el-col>
       </el-row>
     </div>
@@ -58,13 +60,7 @@
     <div class="filter-group keywords">
       <el-row type="flex" justify="end">
         <el-col :span="12">
-          <span>嵌入式</span>
-          <span>算法</span>
-          <span>机械</span>
-          <span>采购</span>
-          <span>运维</span>
-          <span>开发</span>
-          <span>实习生</span>
+          <span v-for="kw in keywords" :key="kw.id">{{kw.enumShortNote}}</span>
         </el-col>
       </el-row>
     </div>
@@ -75,8 +71,29 @@
 export default {
   data () {
     return {
-      input: ''
+      input: '',
+      activeCate: 0, // 当前激活类
+      activeCity: 0, // 当前激活类
+      cityList: [], // 城市列表
+      cateList: [], // 类别列表
+      keywords: [] // 关键词列表
     }
+  },
+  methods: {
+    async init () { // 数据初始化
+      // 查询城市
+      const { cityList } = await this.$http.get('position/queryUsingAndOldCity/N')
+      // 查询类别
+      const cateList = await this.$http.get('position/queryUsingPositionClass/N')
+      // 查询关键词
+      const keywords = await this.$http.get('enumnote/query/socialKeyword')
+      this.cityList = [{ cityName: '所有城市', locCode: 0 }, ...cityList]
+      this.cateList = [{ description: '所有类别', classCode: 0 }, ...cateList]
+      this.keywords = keywords
+    }
+  },
+  mounted () {
+    this.init()
   }
 }
 </script>

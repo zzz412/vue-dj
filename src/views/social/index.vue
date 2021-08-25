@@ -98,7 +98,7 @@ export default {
     async fetchData () { // 获取职位列表
       // 获取数据时加载动画
       this.isLoading = true
-      const { data } = await this.$http.post('/dj/position/queryUsingAndOldPositionVoList',
+      const data = await this.$http.post('position/queryUsingAndOldPositionVoList',
         {
           currentPage: this.pagination.currentPage,
           schoolFlag: 'N',
@@ -106,12 +106,12 @@ export default {
         })
       // 停止加载动画
       this.isLoading = false
-      this.tableData = data.data.datas
+      this.tableData = data.datas
       // 设置页码与总条数
       this.pagination = {
-        currentPage: data.data.currentPage,
-        pageSize: data.data.pageSize,
-        totalCount: data.data.totalCount
+        currentPage: data.currentPage,
+        pageSize: data.pageSize,
+        totalCount: data.totalCount
       }
     },
     pageChange (page) {
