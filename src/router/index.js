@@ -13,7 +13,8 @@ const routes = [
     children: [
       // alias 路由别名  name 路由命名
       { path: '/home', component: () => import('@/views/home'), alias: '' },
-      { path: '/social', component: () => import('@/views/social') }
+      { path: '/social', component: () => import('@/views/social') },
+      { path: '/position/:id', component: () => import('@/views/position'), name: 'position' }
     ]
   }
 ]

@@ -20,7 +20,7 @@
               align 排列方向
               show-overflow-tooltip 文字超出隐藏并显示提示
          -->
-        <!-- v-loading 加载指令  true加载 false停止加载
+        <!-- v-loading 加载指令  true加载  false停止加载
                 直接用在需要加载的标签上
                 自定义属性：
                   element-loading-text 设置文案
@@ -51,8 +51,8 @@
           </el-table-column>
           <el-table-column prop="sex" label="操作">
             <!-- 定义template标签 自定义列内容 -->
-            <template>
-              <p class="info">
+            <template slot-scope="{ row }">
+              <p class="info" @click="goInfo(row.positionId)">
                 查看详情<i class="el-icon-arrow-right fav"></i>
               </p>
             </template>
@@ -66,9 +66,9 @@
               layout 分页器布局
               background 设置分页背景色
          -->
-         <!-- 1. 点击对应页码 进行页面跳转  -->
-         <!-- 2. 页面刷新 分页器跳转到对应页  -->
-         <el-pagination
+        <!-- 1. 点击对应页码 进行页面跳转  -->
+        <!-- 2. 页面刷新 分页器跳转到对应页  -->
+        <el-pagination
           :total="pagination.totalCount"
           :page-size="pagination.pageSize"
           :current-page="pagination.currentPage"
@@ -76,7 +76,7 @@
           background
           @current-change="pageChange"
          >
-         </el-pagination>
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -126,6 +126,15 @@ export default {
       this.queryInput = query
       // 调用查询方法
       this.fetchData()
+    },
+    goInfo (id) { // 跳转职位详情
+      // push方法 只能本窗口跳转
+      // this.$router.push({ name: 'position', params: { id } })
+
+      // resolve方法 解析需要跳转的地址为 普通地址
+      const { href } = this.$router.resolve({ name: 'position', params: { id } })
+      // 使用JS打开新窗口跳转
+      window.open(href)
     }
   },
   mounted () {
